@@ -1,6 +1,7 @@
 # Ignorar arquivos espec?ficos
 .DS_Store
 Thumbs.db
+config.js
 
 # Folder config file
 Desktop.ini
