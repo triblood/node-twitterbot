@@ -1,0 +1,16 @@
+{
+  "name": "node-twitterbot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bot.js",
+  "scripts": {
+    "start": "node bot.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "node-cron": "^2.0.3",
+    "twit": "^2.2.11"
+  }
+}
