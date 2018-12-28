@@ -5,28 +5,36 @@ let cron = require('node-cron');
 let Twitter = new twit(config);
 
 let hashBase = [
-    '#ChoqueDeCultura',
-    '#NerdcastDeRPG',
+    '#frasepracamiseta',
     '#rpg',
-    '#nerdcast',
-    '#jovemnerd',
-    '#NerdcastdeRPG',
-    '#psn',
+    '#ps4',
     '#javascript',
-    '#js',
     '#nodejs',
     '#ps4',
     '#frontend',
-    '#Em2019EuVou'
+    '#MinhaSerieFavorita',
+    '#nerd',
+    '#geek',
+    '#picoftheday',
+    '#mobilephotography',
+    '#blackandwhitephotography',
+    '#UltimaSextaDoAnoEEu'
+]
+
+let resultType = [
+    'mixed',
+    'recent',
+    'popular'
 ]
 
 console.log('\x1b[36m%s\x1b[0m', 'Starting...');
 
 let retweet = function () {
     let hash = hashRandom();
+    let typeR = resTypeRandom();
     let params = {
         q: hashBase[hash], // REQUIRED
-        result_type: 'mixed'
+        result_type: resultType[typeR]
     }
 
     console.log('\x1b[93m%s\x1b[0m', hashBase[hash]);
@@ -35,20 +43,25 @@ let retweet = function () {
         // if there no errors
         console.log('\x1b[36m%s\x1b[0m', 'Searching for tweet to retweet...');
         if (!err) {
-            // grab ID of tweet to retweet
-            let retweetId = data.statuses[0].id_str;
-            // Tell TWITTER to retweet
-            Twitter.post('statuses/retweet/:id', {
-                id: retweetId
-            }, function (err, response) {
-                if (response) {
-                    console.log('\x1b[92m%s\x1b[0m', 'Retweeted!!!');
-                }
-                // if there was an error while tweeting
-                if (err) {
-                    console.log('\x1b[31m%s\x1b[0m', 'Something went wrong while RETWEETING... ' + err);
-                }
-            });
+            if(!data.statuses[0] == undefined){
+                
+                // grab ID of tweet to retweet
+                let retweetId = data.statuses[0].id_str;
+                // Tell TWITTER to retweet
+                Twitter.post('statuses/retweet/:id', {
+                    id: retweetId
+                }, function (err, response) {
+                    if (response) {
+                        console.log('\x1b[92m%s\x1b[0m', 'Retweeted!!!');
+                    }
+                    // if there was an error while tweeting
+                    if (err) {
+                        console.log('\x1b[31m%s\x1b[0m', 'Something went wrong while RETWEETING... ' + err);
+                    }
+                });
+            } else {
+                console.log('\x1b[36m%s\x1b[0m', 'Found nothing...');
+            }
         }
         // if unable to Search a tweet
         else {
@@ -59,9 +72,10 @@ let retweet = function () {
 
 let favoriteTweet = function () {
     let hash = hashRandom();
+    let typeR = resTypeRandom();
     let params = {
         q: hashBase[hash], // REQUIRED
-        result_type: 'mixed'
+        result_type: resultType[typeR]
     }
 
     console.log('\x1b[93m%s\x1b[0m', hashBase[hash])
@@ -86,6 +100,8 @@ let favoriteTweet = function () {
                     console.log('\x1b[92m%s\x1b[0m', 'FAVORITED... Success!!!');
                 }
             });
+        } else {
+            console.log('\x1b[36m%s\x1b[0m', 'Found nothing...');
         }
     });
 }
@@ -132,6 +148,11 @@ let hashRandom = function () {
     return x;
 }
 
+let resTypeRandom = function () {
+    let y = Math.floor(Math.random() * resultType.length);
+    return y;
+}
+
 function ranDom(arr) {
     let index = Math.floor(Math.random() * arr.length);
     return arr[index];
@@ -139,14 +160,14 @@ function ranDom(arr) {
 
 // myTimeLine();
 
-updateStatus();
+// updateStatus();
 
 
-// cron.schedule('*/2 * * * *', () => {
-//     favoriteTweet();
-// });
+cron.schedule('*/2 * * * *', () => {
+    favoriteTweet();
+});
 
 
-// cron.schedule('*/5 * * * *', () => {
-//     retweet();
-// });
+cron.schedule('*/5 * * * *', () => {
+    retweet();
+});
