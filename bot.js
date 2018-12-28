@@ -162,11 +162,9 @@ function ranDom(arr) {
 
 // updateStatus();
 
-
 cron.schedule('*/2 * * * *', () => {
     favoriteTweet();
 });
-
 
 cron.schedule('*/5 * * * *', () => {
     retweet();
