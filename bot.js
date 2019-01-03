@@ -5,20 +5,18 @@ let cron = require('node-cron');
 let Twitter = new twit(config);
 
 let hashBase = [
-    '#frasepracamiseta',
+    '#CiteArrependimentos',
     '#rpg',
     '#ps4',
     '#javascript',
     '#nodejs',
     '#ps4',
     '#frontend',
-    '#MinhaSerieFavorita',
     '#nerd',
     '#geek',
     '#picoftheday',
     '#mobilephotography',
-    '#blackandwhitephotography',
-    '#UltimaSextaDoAnoEEu'
+    '#blackandwhitephotography'
 ]
 
 let resultType = [
@@ -43,7 +41,8 @@ let retweet = function () {
         // if there no errors
         console.log('\x1b[36m%s\x1b[0m', 'Searching for tweet to retweet...');
         if (!err) {
-            if(!data.statuses[0] == undefined){
+            console.log(data.statuses[0].id_str);
+            if(data.statuses[0].id_str != undefined){
                 
                 // grab ID of tweet to retweet
                 let retweetId = data.statuses[0].id_str;
@@ -136,6 +135,17 @@ let updateStatus = function () {
     });
 }
 
+
+let tweeting = function () {
+    Twitter.post('statuses/update', {status: 'Eita https://g1.globo.com/economia/tecnologia/blog/altieres-rohr/post/2018/12/19/criminosos-escondem-comandos-de-virus-em-memes-no-twitter.ghtml'}, function (err, data, response) {
+        if (err) {
+            console.log(err)
+        } else {
+            console.log(response)
+        }
+    })
+}
+
 let myTimeLine = function (){
     Twitter.get('statuses/home_timeline', {count: 1}, function(err, data, response){
         // console.log(data[0].id)
@@ -160,12 +170,12 @@ function ranDom(arr) {
 
 // myTimeLine();
 
-// updateStatus();
+tweeting();
 
-cron.schedule('*/2 * * * *', () => {
-    favoriteTweet();
-});
+// cron.schedule('*/1 * * * *', () => {
+//     favoriteTweet();
+// });
 
-cron.schedule('*/5 * * * *', () => {
-    retweet();
-});
+// cron.schedule('*/3 * * * *', () => {
+//     retweet();
+// });
