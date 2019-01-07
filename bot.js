@@ -5,18 +5,13 @@ let cron = require('node-cron');
 let Twitter = new twit(config);
 
 let hashBase = [
-    '#CiteArrependimentos',
-    '#rpg',
-    '#ps4',
+    '#DiaDoLeitor',
     '#javascript',
     '#nodejs',
     '#ps4',
     '#frontend',
-    '#nerd',
-    '#geek',
-    '#picoftheday',
-    '#mobilephotography',
-    '#blackandwhitephotography'
+    '#TheOscarGoesTo',
+    '#OdeioVer'
 ]
 
 let resultType = [
@@ -32,6 +27,7 @@ let retweet = function () {
     let typeR = resTypeRandom();
     let params = {
         q: hashBase[hash], // REQUIRED
+        lang: 'pt',
         result_type: resultType[typeR]
     }
 
@@ -41,9 +37,9 @@ let retweet = function () {
         // if there no errors
         console.log('\x1b[36m%s\x1b[0m', 'Searching for tweet to retweet...');
         if (!err) {
-            console.log(data.statuses[0].id_str);
-            if(data.statuses[0].id_str != undefined){
-                
+            
+            if(data.statuses.length != '0'){
+                console.log('if')    
                 // grab ID of tweet to retweet
                 let retweetId = data.statuses[0].id_str;
                 // Tell TWITTER to retweet
@@ -135,7 +131,6 @@ let updateStatus = function () {
     });
 }
 
-
 let tweeting = function () {
     Twitter.post('statuses/update', {status: 'Eita https://g1.globo.com/economia/tecnologia/blog/altieres-rohr/post/2018/12/19/criminosos-escondem-comandos-de-virus-em-memes-no-twitter.ghtml'}, function (err, data, response) {
         if (err) {
@@ -170,12 +165,14 @@ function ranDom(arr) {
 
 // myTimeLine();
 
-tweeting();
+// tweeting();
 
-// cron.schedule('*/1 * * * *', () => {
-//     favoriteTweet();
-// });
+// retweet();
 
-// cron.schedule('*/3 * * * *', () => {
-//     retweet();
-// });
+cron.schedule('*/1 * * * *', () => {
+    favoriteTweet();
+});
+
+cron.schedule('*/3 * * * *', () => {
+    retweet();
+});
